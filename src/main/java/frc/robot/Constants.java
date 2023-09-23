@@ -65,6 +65,13 @@ public final class Constants {
     public static final boolean kGyroReversed = false;
   }
 
+  public static final class ManipulatorConstants {
+    // Arm CAN ID
+    public static final int kArmMotorCanId = 19;
+    // Intake CAN ID
+    public static final int kIntakeMotorCanId = 18;
+  }
+
   public static final class ModuleConstants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
     // This changes the drive speed of the module (a pinion gear with more teeth will result in a

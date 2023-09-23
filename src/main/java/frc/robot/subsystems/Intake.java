@@ -5,13 +5,17 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
 
   private static Intake m_intake;
+  private CANSparkMax m_intakeMotor;
   /** Creates a new Intake. */
   private Intake() {
-
+    m_intakeMotor = new CANSparkMax(Constants.ManipulatorConstants.kIntakeMotorCanId, MotorType.kBrushless);
   }
 
   public static Intake getInstance() {
@@ -19,6 +23,10 @@ public class Intake extends SubsystemBase {
       m_intake = new Intake();
     }
     return m_intake;
+  }
+
+  public void spin(double speed) {
+    m_intakeMotor.set(speed);
   }
 
   @Override
