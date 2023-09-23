@@ -19,6 +19,8 @@ import frc.robot.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drive extends SubsystemBase {
+  private static Drive m_drive;
+
   // Create MAXSwerveModules
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
@@ -64,7 +66,14 @@ public class Drive extends SubsystemBase {
       });
 
   /** Creates a new Drive. */
-  public Drive() {
+  private Drive() {
+  }
+
+  public static Drive getInstance() {
+    if (m_drive == null) {
+      m_drive = new Drive();
+    }
+    return m_drive;
   }
 
   @Override

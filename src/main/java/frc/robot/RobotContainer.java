@@ -18,7 +18,9 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -33,7 +35,9 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final Drive m_robotDrive = new Drive();
+  private final Drive m_robotDrive = Drive.getInstance();
+  private final Intake m_intake = Intake.getInstance();
+  private final Arm m_arm = Arm.getInstance();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
