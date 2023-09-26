@@ -14,10 +14,12 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.intake.Consume;
+import frc.robot.commands.intake.Expel;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
@@ -42,6 +44,7 @@ public class RobotContainer {
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  XboxController m_operatorController = new XboxController(OIConstants.kOperatorControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -63,6 +66,10 @@ public class RobotContainer {
             m_robotDrive)
         );
 
+    // Register Testing Dashboard Commands
+    Expel.registerWithTestingDashboard();
+    Consume.registerWithTestingDashboard();
+
     // Create Testing Dashboard
     TestingDashboard.getInstance().createTestingDashboard();
   }
@@ -77,10 +84,18 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
+
+    // Button for defensive stance 'X' mode for swerve drive
+    new JoystickButton(m_driverController, Button.kA.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+
+    // Buttons for Intake on Operator Controller
+    new JoystickButton(m_operatorController, Button.kA.value)
+        .whileTrue(new Consume());
+    new JoystickButton(m_operatorController, Button.kY.value)
+        .whileTrue(new Expel());
   }
 
   /**

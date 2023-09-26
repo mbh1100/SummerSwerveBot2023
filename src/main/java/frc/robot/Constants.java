@@ -70,6 +70,10 @@ public final class Constants {
     public static final int kArmMotorCanId = 19;
     // Intake CAN ID
     public static final int kIntakeMotorCanId = 18;
+
+    // Intake speed forwards
+    public static final double kIntakeConsumeSpeed = 0.3;
+    public static final double kIntakeExpelSpeed = -0.3;
   }
 
   public static final class ModuleConstants {
@@ -125,6 +129,7 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kOperatorControllerPort = 1;
     public static final double kDriveDeadband = 0.05;
   }
 
