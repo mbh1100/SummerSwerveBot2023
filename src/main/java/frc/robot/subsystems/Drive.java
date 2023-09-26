@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.testingdashboard.TestingDashboard;
 import frc.robot.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -72,6 +73,7 @@ public class Drive extends SubsystemBase {
   public static Drive getInstance() {
     if (m_drive == null) {
       m_drive = new Drive();
+      TestingDashboard.getInstance().registerSubsystem(m_drive, "Drive");
     }
     return m_drive;
   }

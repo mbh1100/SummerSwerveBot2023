@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Constants;
+import frc.robot.testingdashboard.TestingDashboard;
 
 public class Intake extends SubsystemBase {
 
@@ -21,6 +22,7 @@ public class Intake extends SubsystemBase {
   public static Intake getInstance() {
     if (m_intake == null) {
       m_intake = new Intake();
+      TestingDashboard.getInstance().registerSubsystem(m_intake, "Intake");
     }
     return m_intake;
   }

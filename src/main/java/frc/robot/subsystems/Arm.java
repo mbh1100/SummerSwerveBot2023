@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.testingdashboard.TestingDashboard;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -22,6 +23,7 @@ public class Arm extends SubsystemBase {
   public static Arm getInstance() {
     if (m_arm == null) {
       m_arm = new Arm();
+      TestingDashboard.getInstance().registerSubsystem(m_arm, "Arm");
     }
     return m_arm;
   }
