@@ -74,6 +74,20 @@ public final class Constants {
     // Intake speed forwards
     public static final double kIntakeConsumeSpeed = 0.3;
     public static final double kIntakeExpelSpeed = -0.3;
+
+    // Arm PID values
+    public static final double kArmP = 0.05;
+    public static final double kArmI = 0;
+    public static final double kArmD = 0;
+
+    public static final double kDegreesPerRevolution = 360;
+    public static final double kArmMotorRotationsPerRevolution = 100; // TODO: Verify this number
+    public static final double kArmDegreesPerPulse = kDegreesPerRevolution / kArmMotorRotationsPerRevolution;
+
+
+    // Arm Motor constants
+    public static final int kArmCurrentLimit = 60;
+    public static final double kArmMaxPower = 0.7;
   }
 
   public static final class ModuleConstants {
