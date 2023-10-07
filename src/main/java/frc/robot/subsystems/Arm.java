@@ -60,12 +60,20 @@ public class Arm extends SubsystemBase {
     return m_armEncoder.getPosition() * Constants.ManipulatorConstants.kArmDegreesPerPulse;
   }
 
+  //* set the target arm angle */
+  public void setArmTargetDegrees(int degrees)
+  {
+    m_armTargetAngle = degrees;
+  }
+
+  //* turn on the PID */
   public void enableArmPid() {
     m_armPidEnable = true;
     m_armPid.reset();
   }
 
-  public void disableWristPid() {
+  //* turn off the PID */
+  public void disableArmPid() {
     m_armPidEnable = false;
     m_armMotor.set(0);
   }
@@ -84,7 +92,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void controlJointsWithSoftwarePidControl() {
-    updateJointSoftwarePidControllerValues();
+    //updateJointSoftwarePidControllerValues();
 
     // Do nothing if Arm PID control is not enabled
     if (!m_armPidEnable) {
@@ -99,5 +107,6 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    controlJointsWithSoftwarePidControl();
   }
 }
