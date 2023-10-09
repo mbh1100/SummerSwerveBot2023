@@ -20,6 +20,8 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.intake.Consume;
 import frc.robot.commands.intake.Expel;
+import frc.robot.commands.arm.SetToZero;
+import frc.robot.commands.arm.TenDegrees;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
@@ -96,6 +98,11 @@ public class RobotContainer {
         .whileTrue(new Consume());
     new JoystickButton(m_operatorController, Button.kY.value)
         .whileTrue(new Expel());
+
+    new JoystickButton(m_operatorController, Button.kX.value)
+        .onTrue(new SetToZero());
+    new JoystickButton(m_operatorController, Button.kB.value)
+        .onTrue(new TenDegrees());
   }
 
   /**
