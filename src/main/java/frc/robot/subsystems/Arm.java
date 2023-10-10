@@ -44,6 +44,17 @@ public class Arm extends SubsystemBase {
     if (m_arm == null) {
       m_arm = new Arm();
       TestingDashboard.getInstance().registerSubsystem(m_arm, "Arm");
+      TestingDashboard.getInstance().registerNumber(m_arm, "Encoders", "ArmEncoder", 0);
+      TestingDashboard.getInstance().registerNumber(m_arm, "Encoders", "ArmEncoderPulses", 0);
+      TestingDashboard.getInstance().registerNumber(m_arm, "MotorCurrents", "ArmCurrent", 0);
+      TestingDashboard.getInstance().registerString(m_arm, "PidControl", "ArmSoftwarePidEnable", "Disabled");
+      TestingDashboard.getInstance().registerNumber(m_arm, "ArmSoftwarePID", "TargetArmAngle", 0);
+      TestingDashboard.getInstance().registerNumber(m_arm, "ArmSoftwarePID", "TargetArmTolerance", Constants.ManipulatorConstants.kArmPidTolerance);
+      TestingDashboard.getInstance().registerNumber(m_arm, "ArmSoftwarePID", "TargetArmP", Constants.ManipulatorConstants.kArmP);
+      TestingDashboard.getInstance().registerNumber(m_arm, "ArmSoftwarePID", "TargetArmI", Constants.ManipulatorConstants.kArmI);
+      TestingDashboard.getInstance().registerNumber(m_arm, "ArmSoftwarePID", "TargetArmD", Constants.ManipulatorConstants.kArmD);
+
+      TestingDashboard.getInstance().registerNumber(m_arm, "ArmAngles", "ArmAngle", 0);
     }
     return m_arm;
   }
@@ -60,10 +71,22 @@ public class Arm extends SubsystemBase {
     return m_armEncoder.getPosition() * Constants.ManipulatorConstants.kArmDegreesPerPulse;
   }
 
-  //* set the target arm angle */
+  // Set the target Arm angle
   public void setArmTargetDegrees(int degrees)
   {
-    m_armTargetAngle = degrees;
+    setArmTargetAngle(degrees);
+  }
+
+  public void setArmTargetAngle(double angle) {
+    m_armTargetAngle = angle;
+  }
+
+  public double getArmTargetAngle() {
+    return m_armTargetAngle;
+  }
+
+  public PIDController getArmPID() {
+    return m_armPid;
   }
 
   //* turn on the PID */
@@ -72,7 +95,7 @@ public class Arm extends SubsystemBase {
     m_armPid.reset();
   }
 
-  //* turn off the PID */
+  // Turn off the Arm PID controller
   public void disableArmPid() {
     m_armPidEnable = false;
     m_armMotor.set(0);
@@ -92,7 +115,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void controlJointsWithSoftwarePidControl() {
-    //updateJointSoftwarePidControllerValues();
+    updateJointSoftwarePidControllerValues();
 
     // Do nothing if Arm PID control is not enabled
     if (!m_armPidEnable) {
@@ -104,9 +127,23 @@ public class Arm extends SubsystemBase {
     m_armMotor.set(power);
   }
 
+  public void updatePidEnableFlags() {
+    if (m_armPidEnable) {
+      TestingDashboard.getInstance().updateString(m_arm, "ArmSoftwarePidEnable", "Enabled");
+    } else {
+      TestingDashboard.getInstance().updateString(m_arm, "ArmSoftwarePidEnable", "Disabled");
+    }
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    TestingDashboard.getInstance().updateNumber(m_arm, "ArmCurrent", m_armMotor.getOutputCurrent());
+    TestingDashboard.getInstance().updateNumber(m_arm, "ArmEncoderPulses", m_armEncoder.getPosition());
+    TestingDashboard.getInstance().updateNumber(m_arm, "ArmAngle", getArmAngle());
+
+    updatePidEnableFlags();
     controlJointsWithSoftwarePidControl();
   }
 }

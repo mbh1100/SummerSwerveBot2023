@@ -20,6 +20,9 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.intake.Consume;
 import frc.robot.commands.intake.Expel;
+import frc.robot.commands.arm.ArmOperatorRelativeAngleControl;
+import frc.robot.commands.arm.DisableArmPid;
+import frc.robot.commands.arm.EnableArmPid;
 import frc.robot.commands.arm.SetToZero;
 import frc.robot.commands.arm.TenDegrees;
 import frc.robot.subsystems.Arm;
@@ -68,9 +71,15 @@ public class RobotContainer {
             m_robotDrive)
         );
 
+    m_arm.setDefaultCommand(new ArmOperatorRelativeAngleControl(m_operatorController));
+    
     // Register Testing Dashboard Commands
     Expel.registerWithTestingDashboard();
     Consume.registerWithTestingDashboard();
+    EnableArmPid.registerWithTestingDashboard();
+    DisableArmPid.registerWithTestingDashboard();
+    SetToZero.registerWithTestingDashboard();
+    TenDegrees.registerWithTestingDashboard();
 
     // Create Testing Dashboard
     TestingDashboard.getInstance().createTestingDashboard();

@@ -6,12 +6,19 @@ package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
+import frc.robot.testingdashboard.TestingDashboard;
 
 public class TenDegrees extends CommandBase {
   /** Creates a new TenDegrees. */
   public TenDegrees() {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(Arm.getInstance());
+  }
+
+  public static void registerWithTestingDashboard() {
+    Arm arm = Arm.getInstance();
+    TenDegrees cmd = new TenDegrees();
+    TestingDashboard.getInstance().registerCommand(arm, "Basic", cmd);
   }
 
   // Called when the command is initially scheduled.

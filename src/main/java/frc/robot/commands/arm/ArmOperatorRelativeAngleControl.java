@@ -4,21 +4,20 @@
 
 package frc.robot.commands.arm;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
-import frc.robot.testingdashboard.TestingDashboard;
 
-public class SetToZero extends CommandBase {
-  /** Creates a new SetToZero. */
-  public SetToZero() {
+public class ArmOperatorRelativeAngleControl extends CommandBase {
+  Arm m_arm;
+  XboxController m_xbox;
+
+  /** Creates a new ArmOperatorRelativeAngleControl. */
+  public ArmOperatorRelativeAngleControl(XboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(Arm.getInstance());
-  }
-  
-  public static void registerWithTestingDashboard() {
-    Arm arm = Arm.getInstance();
-    SetToZero cmd = new SetToZero();
-    TestingDashboard.getInstance().registerCommand(arm, "Basic", cmd);
+    m_arm = Arm.getInstance();
+    addRequirements(m_arm);
   }
 
   // Called when the command is initially scheduled.
@@ -28,8 +27,11 @@ public class SetToZero extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Arm.getInstance().setArmTargetDegrees(0);
-    Arm.getInstance().enableArmPid();
+    double angle = m_arm.getArmTargetAngle();
+
+    angle += m_xbox.getLeftY()*Constants.ManipulatorConstants.kArmIncrement;
+
+    m_arm.setArmTargetAngle(angle);
   }
 
   // Called once the command ends or is interrupted.

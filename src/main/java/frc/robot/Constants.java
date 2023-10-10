@@ -80,10 +80,12 @@ public final class Constants {
     public static final double kArmI = 0;
     public static final double kArmD = 0;
 
+    public static final double kArmPidTolerance = 3; // In degrees
+    public static final double kArmIncrement = 2;
+
     public static final double kDegreesPerRevolution = 360;
     public static final double kArmMotorRotationsPerRevolution = 100; // TODO: Verify this number
     public static final double kArmDegreesPerPulse = kDegreesPerRevolution / kArmMotorRotationsPerRevolution;
-
 
     // Arm Motor constants
     public static final int kArmCurrentLimit = 60;
