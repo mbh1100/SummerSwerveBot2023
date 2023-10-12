@@ -17,7 +17,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class Arm extends SubsystemBase {
   private static Arm m_arm;
-  private CANSparkMax m_armMotor;
+  private CANSparkMax m_armRightMotor;
+  private CANSparkMax m_armLeftMotor;
   private RelativeEncoder m_armEncoder;
   private PIDController m_armPid;
   private double m_armTargetAngle;
@@ -25,14 +26,19 @@ public class Arm extends SubsystemBase {
 
   /** Creates a new Arm. */
   private Arm() {
-    m_armMotor = new CANSparkMax(Constants.ManipulatorConstants.kArmMotorCanId, MotorType.kBrushless);
-    m_armMotor.restoreFactoryDefaults();
-    m_armMotor.setSmartCurrentLimit(Constants.ManipulatorConstants.kArmCurrentLimit);
+    m_armRightMotor = new CANSparkMax(Constants.ManipulatorConstants.kArmMotorRightCanId, MotorType.kBrushless);
+    m_armLeftMotor = new CANSparkMax(Constants.ManipulatorConstants.kArmMotorLeftCanId, MotorType.kBrushless);
+    m_armRightMotor.restoreFactoryDefaults();
+    m_armLeftMotor.restoreFactoryDefaults();
+    m_armRightMotor.setSmartCurrentLimit(Constants.ManipulatorConstants.kArmCurrentLimit);
+    m_armLeftMotor.setSmartCurrentLimit(Constants.ManipulatorConstants.kArmCurrentLimit);
 
-    m_armEncoder = m_armMotor.getEncoder();
+    m_armEncoder = m_armRightMotor.getEncoder();
 
-    m_armMotor.setIdleMode(IdleMode.kBrake);
+    m_armRightMotor.setIdleMode(IdleMode.kBrake);
+    m_armLeftMotor.setIdleMode(IdleMode.kBrake);
 
+    m_armLeftMotor.follow(m_armRightMotor, true);
     zeroEncoder();
 
     m_armPid = new PIDController(Constants.ManipulatorConstants.kArmP, Constants.ManipulatorConstants.kArmI, Constants.ManipulatorConstants.kArmD);
@@ -46,7 +52,8 @@ public class Arm extends SubsystemBase {
       TestingDashboard.getInstance().registerSubsystem(m_arm, "Arm");
       TestingDashboard.getInstance().registerNumber(m_arm, "Encoders", "ArmEncoder", 0);
       TestingDashboard.getInstance().registerNumber(m_arm, "Encoders", "ArmEncoderPulses", 0);
-      TestingDashboard.getInstance().registerNumber(m_arm, "MotorCurrents", "ArmCurrent", 0);
+      TestingDashboard.getInstance().registerNumber(m_arm, "MotorCurrents", "ArmCurrentR", 0);
+      TestingDashboard.getInstance().registerNumber(m_arm, "MotorCurrents", "ArmCurrentL", 0);
       TestingDashboard.getInstance().registerString(m_arm, "PidControl", "ArmSoftwarePidEnable", "Disabled");
       TestingDashboard.getInstance().registerNumber(m_arm, "ArmSoftwarePID", "TargetArmAngle", 0);
       TestingDashboard.getInstance().registerNumber(m_arm, "ArmSoftwarePID", "TargetArmTolerance", Constants.ManipulatorConstants.kArmPidTolerance);
@@ -98,7 +105,7 @@ public class Arm extends SubsystemBase {
   // Turn off the Arm PID controller
   public void disableArmPid() {
     m_armPidEnable = false;
-    m_armMotor.set(0);
+    m_armRightMotor.set(0);
   }
 
   public void updateJointSoftwarePidControllerValues() {
@@ -124,7 +131,7 @@ public class Arm extends SubsystemBase {
 
     double power = m_armPid.calculate(getArmAngle(), m_armTargetAngle);
     power = MathUtil.clamp(power, -Constants.ManipulatorConstants.kArmMaxPower, Constants.ManipulatorConstants.kArmMaxPower);
-    m_armMotor.set(power);
+    m_armRightMotor.set(power);
   }
 
   public void updatePidEnableFlags() {
@@ -139,7 +146,8 @@ public class Arm extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    TestingDashboard.getInstance().updateNumber(m_arm, "ArmCurrent", m_armMotor.getOutputCurrent());
+    TestingDashboard.getInstance().updateNumber(m_arm, "ArmCurrentR", m_armRightMotor.getOutputCurrent());
+    TestingDashboard.getInstance().updateNumber(m_arm, "ArmCurrentL", m_armLeftMotor.getOutputCurrent());
     TestingDashboard.getInstance().updateNumber(m_arm, "ArmEncoderPulses", m_armEncoder.getPosition());
     TestingDashboard.getInstance().updateNumber(m_arm, "ArmAngle", getArmAngle());
 

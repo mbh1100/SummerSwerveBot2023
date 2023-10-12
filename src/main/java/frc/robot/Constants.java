@@ -67,9 +67,11 @@ public final class Constants {
 
   public static final class ManipulatorConstants {
     // Arm CAN ID
-    public static final int kArmMotorCanId = 19;
+    public static final int kArmMotorLeftCanId = 32;
+    public static final int kArmMotorRightCanId = 31;
     // Intake CAN ID
-    public static final int kIntakeMotorCanId = 18;
+    public static final int kWristMotorCanId = 33;
+    public static final int kIntakeMotorCanId = 30;
 
     // Intake speed forwards
     public static final double kIntakeConsumeSpeed = 0.3;
@@ -82,6 +84,7 @@ public final class Constants {
 
     public static final double kArmPidTolerance = 3; // In degrees
     public static final double kArmIncrement = 2;
+    public static final double kArmDeadband = 0.05;
 
     public static final double kDegreesPerRevolution = 360;
     public static final double kArmMotorRotationsPerRevolution = 100; // TODO: Verify this number

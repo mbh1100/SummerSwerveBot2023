@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
+import edu.wpi.first.math.MathUtil;
 
 public class ArmOperatorRelativeAngleControl extends CommandBase {
   Arm m_arm;
@@ -17,19 +18,24 @@ public class ArmOperatorRelativeAngleControl extends CommandBase {
   public ArmOperatorRelativeAngleControl(XboxController controller) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_arm = Arm.getInstance();
+    m_xbox = controller;
     addRequirements(m_arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_arm.enableArmPid();
+    m_arm.zeroEncoder();
+    m_arm.setArmTargetAngle(0);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double angle = m_arm.getArmTargetAngle();
-
-    angle += m_xbox.getLeftY()*Constants.ManipulatorConstants.kArmIncrement;
+    double input = MathUtil.applyDeadband(m_xbox.getLeftY(), Constants.ManipulatorConstants.kArmDeadband);
+    angle += input*Constants.ManipulatorConstants.kArmIncrement;
 
     m_arm.setArmTargetAngle(angle);
   }
