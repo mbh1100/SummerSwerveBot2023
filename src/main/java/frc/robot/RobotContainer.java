@@ -25,9 +25,13 @@ import frc.robot.commands.arm.DisableArmPid;
 import frc.robot.commands.arm.EnableArmPid;
 import frc.robot.commands.arm.SetToZero;
 import frc.robot.commands.arm.TenDegrees;
+import frc.robot.commands.wrist.WristManualControl;
+import frc.robot.commands.wrist.WristPreset1;
+import frc.robot.commands.wrist.WristPreset2;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.PIDWrist;
 import frc.robot.testingdashboard.TestingDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -44,8 +48,8 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final Drive m_robotDrive = Drive.getInstance();
-  private final Intake m_intake = Intake.getInstance();
   private final Arm m_arm = Arm.getInstance();
+  private final PIDWrist m_wrist = PIDWrist.getInstance();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -72,6 +76,7 @@ public class RobotContainer {
         );
 
     m_arm.setDefaultCommand(new ArmOperatorRelativeAngleControl(m_operatorController));
+    m_wrist.setDefaultCommand(new WristManualControl(m_operatorController));
     
     // Register Testing Dashboard Commands
     Expel.registerWithTestingDashboard();
@@ -104,14 +109,19 @@ public class RobotContainer {
 
     // Buttons for Intake on Operator Controller
     new JoystickButton(m_operatorController, Button.kA.value)
-        .whileTrue(new Consume());
+        .onTrue(new WristPreset1());
     new JoystickButton(m_operatorController, Button.kY.value)
-        .whileTrue(new Expel());
+        .onTrue(new WristPreset2());
 
     new JoystickButton(m_operatorController, Button.kX.value)
         .onTrue(new SetToZero());
     new JoystickButton(m_operatorController, Button.kB.value)
         .onTrue(new TenDegrees());
+
+    new JoystickButton(m_operatorController, Button.kLeftBumper.value)
+        .whileTrue(new Consume());
+    new JoystickButton(m_operatorController, Button.kRightBumper.value)
+        .whileTrue(new Expel());
   }
 
   /**

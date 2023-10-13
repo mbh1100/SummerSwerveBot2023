@@ -75,7 +75,7 @@ public final class Constants {
 
     // Intake speed forwards
     public static final double kIntakeConsumeSpeed = 0.3;
-    public static final double kIntakeExpelSpeed = -0.3;
+    public static final double kIntakeExpelSpeed = -0.7;
 
     // Arm PID values
     public static final double kArmP = 0.05;
@@ -89,10 +89,26 @@ public final class Constants {
     public static final double kDegreesPerRevolution = 360;
     public static final double kArmMotorRotationsPerRevolution = 100; // TODO: Verify this number
     public static final double kArmDegreesPerPulse = kDegreesPerRevolution / kArmMotorRotationsPerRevolution;
-
+    
     // Arm Motor constants
     public static final int kArmCurrentLimit = 60;
-    public static final double kArmMaxPower = 0.7;
+    public static final double kArmMaxPower = 0.5;
+
+    // Wrist PID values
+    public static final double kWristP = 0.005;
+    public static final double kWristI = 0.0005;
+    public static final double kWristD = 0;
+
+    public static final double kWristMotorRotationsPerRevolution = 100; // TODO: Verify this number
+    public static final double kWristDegreesPerPulse = kDegreesPerRevolution / kWristMotorRotationsPerRevolution;
+    public static final double kWristMaxPower = 0.01;
+    public static final double kWristDeadband = 0.05;
+    public static final double kWristIncrement = 10;
+
+    // Wrist setpoints
+    public static final double kWristSetpoint0 = 0;
+    public static final double kWristSetpoint90 = 90;
+
   }
 
   public static final class ModuleConstants {
